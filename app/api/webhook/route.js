@@ -11,12 +11,15 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
 );
 
+// This is how you disable body parsing in App Router
+export const dynamic = 'force-dynamic';
+export const runtime = 'nodejs';
+
 export async function POST(request) {
   const body = await request.text();
   const sig = request.headers.get('stripe-signature');
-
+  
   let event;
-
   try {
     event = stripe.webhooks.constructEvent(
       body,
@@ -38,7 +41,7 @@ export async function POST(request) {
     // Update the order status in your database
     const { error } = await supabase
       .from('orders')
-      .update({ 
+      .update({
         status: 'paid',
         payment_intent: session.payment_intent,
         shipping_details: session.shipping ? JSON.stringify(session.shipping) : null,
@@ -46,21 +49,15 @@ export async function POST(request) {
         updated_at: new Date().toISOString()
       })
       .eq('id', orderId);
-
+      
     if (error) {
       console.error('Error updating order status:', error);
       return NextResponse.json({ error: 'Failed to update order status' }, { status: 500 });
     }
-
+    
     // For successful checkout
     console.log(`Order ${orderId} has been paid successfully`);
   }
-
+  
   return NextResponse.json({ received: true });
 }
-
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
