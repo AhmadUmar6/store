@@ -5,6 +5,7 @@ import ProductCard from "@/components/ProductCard";
 import { createClient } from '@supabase/supabase-js';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
+import Image from 'next/image'; // Import Next.js Image component
 
 // Initialize Supabase client
 const supabase = createClient(
@@ -86,19 +87,30 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Hero Section with Image Carousel */}
+      {/* Hero Section with Image Carousel - Using Next.js Image for optimization */}
       <section className="relative h-[85vh] bg-gray-100 overflow-hidden">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={currentHeroImage}
-            className="absolute inset-0 bg-center bg-cover"
-            style={{ backgroundImage: `url(${heroImages[currentHeroImage]})` }}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 1 }}
-          />
-        </AnimatePresence>
+        <div className="absolute inset-0 flex justify-center items-center">
+          <AnimatePresence mode="wait">
+            <motion.div 
+              key={currentHeroImage}
+              className="relative w-full h-full"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 1 }}
+            >
+              <Image 
+                src={heroImages[currentHeroImage]} 
+                alt="Hero image"
+                fill
+                priority={true}
+                sizes="100vw"
+                style={{ objectFit: 'cover' }}
+                loading="eager"
+              />
+            </motion.div>
+          </AnimatePresence>
+        </div>
         
         <div className="absolute inset-0 bg-black bg-opacity-30" />
         

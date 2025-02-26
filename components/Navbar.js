@@ -98,7 +98,7 @@ export default function Navbar() {
       {isMenuOpen && (
         <div className="md:hidden bg-white border-t">
           <div className="container mx-auto px-4 py-6 space-y-6 flex flex-col items-center">
-            <NavLink href="/shop" label="Shop" />
+            <NavLink href="/" label="Shop" />
             <NavLink href="/products" label="Products" />
             <NavLink href="/contact" label="Contact" />
           </div>
