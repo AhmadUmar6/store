@@ -66,11 +66,6 @@ export default function HomePage() {
     return () => clearInterval(interval);
   }, []);
 
-  // Format price with $ symbol
-  const formatPrice = (price) => {
-    return `$${price.toFixed(2)}`;
-  };
-
   return (
     <main className="min-h-screen font-sans">
       {/* Continuous Horizontal Scrolling Banner */}
@@ -181,12 +176,7 @@ export default function HomePage() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.5, delay: index * 0.1 }}
               >
-                <ProductCard 
-                  product={{
-                    ...product,
-                    price: formatPrice(product.price)
-                  }} 
-                />
+                <ProductCard product={product} />
               </motion.div>
             ))}
           </div>
